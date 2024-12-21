@@ -1,15 +1,17 @@
 {
   "name": "website",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A sample Node.js app with user authentication",
+  "main": "App.js",
   "scripts": {
+    "start": "node App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
