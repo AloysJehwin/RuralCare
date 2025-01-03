@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Health Data</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .container h2, .container h3 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .personal-details {
+            margin-bottom: 30px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .personal-details p {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .validation-error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Update Your Health Data</h2>
+
+        <div class="personal-details">
+            <h3>Your Personal Details</h3>
+            <p><strong>Name:</strong> {{ user_details['name'] }}</p>
+            <p><strong>Age:</strong> {{ user_details['age'] }}</p>
+            <p><strong>Height:</strong> {{ user_details['height'] }} cm</p>
+            <p><strong>Weight:</strong> {{ user_details['weight'] }} kg</p>
+            <p><strong>Date of Birth:</strong> {{ user_details['dob'] }}</p>
+        </div>
+
+        <form method="POST" id="healthForm">
+            <h3>Update Health Data</h3>
+            <div class="input-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+                <span class="validation-error" id="dateError">Please enter a valid date.</span>
+            </div>
+            <div class="input-group">
+                <label for="heart_rate">Heart Rate</label>
+                <input type="number" id="heart_rate" name="heart_rate" placeholder="Enter heart rate" min="40" max="200" required>
+                <span class="validation-error" id="heartRateError">Heart rate should be between 40 and 200 bpm.</span>
+            </div>
+            <div class="input-group">
+                <label for="blood_pressure">Blood Pressure</label>
+                <input type="text" id="blood_pressure" name="blood_pressure" placeholder="e.g., 120/80" required pattern="\d{2,3}/\d{2,3}">
+                <span class="validation-error" id="bpError">Enter in the format e.g., 120/80.</span>
+            </div>
+            <div class="input-group">
+                <label for="spo2">SPO2</label>
+                <input type="number" id="spo2" name="spo2" placeholder="Enter SPO2 level" min="85" max="100" required>
+                <span class="validation-error" id="spo2Error">SPO2 should be between 85% and 100%.</span>
+            </div>
+            <button type="submit" class="btn">Update</button>
+        </form>
+
+        <div class="link">
+            <a href="/login">Go Back</a>
+        </div>
+
+        <!-- Visualize Data Button -->
+        <div class="link">
+            <a href="/visualize_health_data">Visualize Your Data</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('healthForm');
+
+        form.addEventListener('submit', (e) => {
+            let valid = true;
+
+            // Date validation
+            const dateInput = document.getElementById('date');
+            const dateError = document.getElementById('dateError');
+            if (!dateInput.value) {
+                dateError.style.display = 'block';
+                valid = false;
+            } else {
+                dateError.style.display = 'none';
+            }
+
+            // Heart rate validation
+            const heartRateInput = document.getElementById('heart_rate');
+            const heartRateError = document.getElementById('heartRateError');
+            if (heartRateInput.value < 40 || heartRateInput.value > 200) {
+                heartRateError.style.display = 'block';
+                valid = false;
+            } else {
+                heartRateError.style.display = 'none';
+            }
+
+            // Blood pressure validation
+            const bpInput = document.getElementById('blood_pressure');
+            const bpError = document.getElementById('bpError');
+            const bpPattern = /\d{2,3}\/\d{2,3}/;
+            if (!bpPattern.test(bpInput.value)) {
+                bpError.style.display = 'block';
+                valid = false;
+            } else {
+                bpError.style.display = 'none';
+            }
+
+            // SPO2 validation
+            const spo2Input = document.getElementById('spo2');
+            const spo2Error = document.getElementById('spo2Error');
+            if (spo2Input.value < 85 || spo2Input.value > 100) {
+                spo2Error.style.display = 'block';
+                valid = false;
+            } else {
+                spo2Error.style.display = 'none';
+            }
+
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
