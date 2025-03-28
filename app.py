@@ -9,11 +9,11 @@ from twilio.rest import Client
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
+import dotenv as os
 
-
-TWILIO_ACCOUNT_SID = 'AC64536413c4011a160925b5e8d007613a'
-TWILIO_AUTH_TOKEN = '8367ca794ee6524543921470eaa893b4'
-TWILIO_PHONE_NUMBER = '+13203587528'
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
